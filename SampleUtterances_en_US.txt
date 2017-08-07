@@ -1,0 +1,6 @@
+GetScoreIntent what is the score for the {Team}
+GetScoreIntent get me the {Team} score for {Date}
+GetScoreIntent whats the current score for {Team}
+GetScoreIntent give me the score for {Team}
+GetScoreIntent tell me the score for {Team}
+GetScoreIntent give me the score
