@@ -1,7 +1,7 @@
 'use strict';
 
 var Alexa = require('alexa-sdk');
-var APP_ID = undefined; //OPTIONAL: replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
+var APP_ID = undefined;
 var SKILL_NAME = 'Baseball Scores';
 var teams = require('teams');
 var mlb = require('mlb');
@@ -16,7 +16,7 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'NewSession': function () {
-      this.emit('ScoresIntent');
+      this.emit('GetScoreIntent');
     },
     'ScoresIntent': function () {
       try {
@@ -26,7 +26,7 @@ var handlers = {
           teamName = teamSlot.value.toLowerCase();
         }
       } catch (e) {
-        var speechOutput = 'You can ask questions such as, what\'s the score of the Mariners game, or, you can say exit... '
+        var speechOutput = 'You can ask questions such as, what\'s the score of the Giants game, or, you can say exit... '
         var repromptSpeech = 'What else can I help with?';
         speechOutput += repromptSpeech;
 
