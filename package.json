@@ -1,0 +1,28 @@
+{
+  "name": "score-skill",
+  "version": "1.0.0",
+  "description": "MLB score skill for alexa",
+  "main": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikomc0/Score-Skill"
+  },
+  "keywords": [
+    "Alexa",
+    "skill",
+    "baseball",
+    "scores"
+  ],
+  "author": "Nick James",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "dependencies": {
+    "alexa-sdk": "^1.0.11"
+  }
+}
