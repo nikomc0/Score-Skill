@@ -5,7 +5,38 @@ var APP_ID = undefined;
 var SKILL_NAME = 'Baseball Scores';
 var teams = require('teams');
 var mlb = require('mlb');
+var express = require('express')
+var request = require('request')
 
+var app = express();
+
+var GA_TRACKING_ID = 'UA-104579134-1';
+
+function track(category, action, label, value, callback) {
+  var data = {
+    v: '1',
+    tid: GA_TRACKING_ID,
+    cid: '555',
+    t: 'event',
+    ec: category,
+    ea: action,
+    el: label,
+    ev: value,
+  };
+
+  request.post(
+    'http://www.google-analytics.com/collect', {
+      form: data
+    },
+    function(err, response) {
+      if (err) { return callback(err); }
+      if (response.statusCode !== 200) {
+        return callback(new Error('Tracking failed'));
+      }
+      callback();
+    }
+  );
+}
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
@@ -16,9 +47,9 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'NewSession': function () {
-      this.emit('GetScoreIntent');
+      this.emit('ScoresIntent');
     },
-    'ScoresIntent': function () {
+    'ScoresIntent': function (intent, session, response) {
       try {
         var teamSlot = this.event.request.intent.slots.Team;
         var teamName;
@@ -52,6 +83,18 @@ var handlers = {
 
             this.emit(':ask', speechOutput, repromptSpeech);
         }
+        trackEvent(
+          'Intent',
+          'AMAZON.ScoresIntent',
+          'na',
+          '100',
+          function (err) {
+            if (err) {
+              return next(err);
+            }
+            var speechOutput = "Okay.";
+            response.tell(speechOutput);
+          });
     },
     'AMAZON.HelpIntent': function () {
         this.attributes['speechOutput'] = 'You can ask questions such as, what\'s the score of the Mariners game, or, you can say exit... ' +
@@ -66,7 +109,19 @@ var handlers = {
     'AMAZON.StopIntent': function () {
         this.emit('SessionEndedRequest');
     },
-    'AMAZON.CancelIntent': function () {
+    'AMAZON.CancelIntent': function (intent, session, response) {
+      trackEvent(
+        'Intent',
+        'AMAZON.CancelIntent',
+        'na',
+        '100',
+        function (err) {
+          if (err) {
+            return next(err);
+          }
+          var speechOutput = "Okay.";
+          response.tell(speechOutput);
+        });
         this.emit('SessionEndedRequest');
     },
     'SessionEndedRequest':function () {
